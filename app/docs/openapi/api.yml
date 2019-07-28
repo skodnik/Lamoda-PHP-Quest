@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: "Lamoda PHP Quest"
+  description: "Вариант решения задачи"
+  version: 0.0.1
+servers:
+  - url: https://quest.vlsv.me/
+    description: "Сервер для отладки"
+paths:
+  /container/{id}:
+    get:
+      summary: "Отдает информацию о контейнере по его идентификатору"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Идентификатор контейнера"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Информация о контейнере"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 7887
+                  name:
+                    type: string
+                    example: Tara
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 3104157
+                        name:
+                          type: string
+                          example: PeggieAntiqueWhite
+        '404':
+          description: "Указанный идентификатор не является числом"
+  /containers-with-unique-items:
+    get:
+      summary: "Отдает информацию о контейнерах содержащих уникальные товары"
+      responses:
+        '200':
+          description: "Список контейнеров"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 7887
+                    name:
+                      type: string
+                      example: Tara
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 3104157
+                          name:
+                            type: string
+                            example: PeggieAntiqueWhite
+  /hook:
+    post:
+      summary: "Принимает запрос на сохранение контейнера/контейнеров со списком товаров"
+      requestBody:
+        description: "JSON объект или массив объектов контейнеров с товарами"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 7887
+                name:
+                  type: string
+                  example: Tara
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 3104157
+                      name:
+                        type: string
+                        example: PeggieAntiqueWhite
+      responses:
+        '200':
+         description: "Список контейнеров"
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 success:
+                   type: boolean
+                 description:
+                   type: string
+                 error:
+                   type: boolean
+                 error_description:
+                   type: string

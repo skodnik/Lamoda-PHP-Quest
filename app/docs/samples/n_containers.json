@@ -1,0 +1,140 @@
+[
+    {
+        "id": 43154154,
+        "name": "Edwina",
+        "items": [
+            {
+                "id": 3321960,
+                "name": "FelicitaPaleGoldenRod"
+            },
+            {
+                "id": 7044053,
+                "name": "ZitaCoral"
+            },
+            {
+                "id": 28472010,
+                "name": "BrisaHoneyDew"
+            },
+            {
+                "id": 41649744,
+                "name": "YasmineMaroon"
+            },
+            {
+                "id": 45072206,
+                "name": "HaylieYellow"
+            },
+            {
+                "id": 55140023,
+                "name": "PetraRoyalBlue"
+            },
+            {
+                "id": 71270913,
+                "name": "ChasityLightPink"
+            },
+            {
+                "id": 87122436,
+                "name": "DarlenePaleGoldenRod"
+            },
+            {
+                "id": 88018798,
+                "name": "AugustaBrown"
+            },
+            {
+                "id": 93147285,
+                "name": "BritneyMidnightBlue"
+            }
+        ]
+    },
+    {
+        "id": 95000800,
+        "name": "Vesta",
+        "items": [
+            {
+                "id": 2468520,
+                "name": "CarmellaLightGreen"
+            },
+            {
+                "id": 4724345,
+                "name": "DelphaDarkorange"
+            },
+            {
+                "id": 4813682,
+                "name": "DorotheaFloralWhite"
+            },
+            {
+                "id": 8863046,
+                "name": "OdieGray"
+            },
+            {
+                "id": 15418907,
+                "name": "TyraLightSeaGreen"
+            },
+            {
+                "id": 27732058,
+                "name": "LeaPowderBlue"
+            },
+            {
+                "id": 28330034,
+                "name": "NedraSnow"
+            },
+            {
+                "id": 32904314,
+                "name": "RamonaLightSlateGray"
+            },
+            {
+                "id": 37602605,
+                "name": "JaclynGhostWhite"
+            },
+            {
+                "id": 58558387,
+                "name": "JuliaMediumSeaGreen"
+            }
+        ]
+    },
+    {
+        "id": 79128087,
+        "name": "Makenzie",
+        "items": [
+            {
+                "id": 4965063,
+                "name": "ThaliaLightSlateGray"
+            },
+            {
+                "id": 19899428,
+                "name": "CarleeTeal"
+            },
+            {
+                "id": 22773395,
+                "name": "BettyDarkSalmon"
+            },
+            {
+                "id": 25222267,
+                "name": "BrisaHoneyDew"
+            },
+            {
+                "id": 51602225,
+                "name": "HaylieYellow"
+            },
+            {
+                "id": 64746303,
+                "name": "MarilyneLightCoral"
+            },
+            {
+                "id": 80581715,
+                "name": "ElenorOlive"
+            },
+            {
+                "id": 86952750,
+                "name": "EliseFireBrick"
+            },
+            {
+                "id": 91344356,
+                "name": "AllySteelBlue"
+            },
+            {
+                "id": 94390975,
+                "name": "RuthieCornflowerBlue"
+            }
+        ]
+    }
+]
