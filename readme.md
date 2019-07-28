@@ -144,7 +144,7 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
 
 Настройка Laravel:
 ```
-$ docker exec -it cd3ad05dc9f6 /bin/bash
+$ docker exec -it 239c5ff2437f /bin/bash
 $ php artisan key:generate
 $ touch database/database.sqlite
 $ php artisan migrate
@@ -222,9 +222,6 @@ End: 28 July 21:06:06
 //////////////////////////////////////
 ```
 
-## База данных
-![Database structure](database.png)
-
 ## Тесты
 ```
 $ php vendor/bin/phpunit tests/Feature/BasicTests.php
@@ -243,6 +240,10 @@ OK (10 tests, 24 assertions)
 
 ## OPEN API
 [api.yml](/app/docs/openapi/api.yml)
+
+
+## Структура базы данных
+![Database structure](database.png)
 
 ## Логика генератора:
 1. Определеяется массив идентификаторов в рамках от 1 до значения (QUANTITY_NAMES) указанного в параметрах, в файле .env.
