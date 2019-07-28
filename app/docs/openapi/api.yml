@@ -4,7 +4,7 @@ info:
   description: "Вариант решения задачи"
   version: 0.0.1
 servers:
-  - url: https://quest.vlsv.me/
+  - url: http://185.251.38.197
     description: "Сервер для отладки"
 paths:
   /container/{id}:

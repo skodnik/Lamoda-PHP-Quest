@@ -30,22 +30,21 @@
 - Ubuntu 18.04.2 LTS
 - nginx/1.14.0
 - PHP 7.2.19
-- MariaDB 10.1.40
 - Laravel v5.8.29
 - Git
 - Composer
 
-Реализован: [https://quest.vlsv.me/](https://quest.vlsv.me/)
+Реализован: [http://185.251.38.197](http://185.251.38.197)
 
 ## REST JSON API Маршруты
 ##### Основной, принимает  на сохранение контейнера/контейнеров. Примеры передаваемых данных в директории /docs/samples
-- **POST**(json) [https://quest.vlsv.me/hook](https://quest.vlsv.me/hook)
+- **POST**(json) [http://185.251.38.197/hook](http://185.251.38.197/hook)
 
 ##### Получение списка контейнеров с уникальными товарами
-- **GET**(пустой) [https://quest.vlsv.me/containers-with-unique-items](https://quest.vlsv.me/containers-with-unique-items)
+- **GET**(пустой) [http://185.251.38.197/containers-with-unique-items](http://185.251.38.197/containers-with-unique-items)
 
 ##### Получение конкретного контейнера по его идентификатору
-- **GET**(/id)  [https://quest.vlsv.me/container/id](https://quest.vlsv.me/container/14429703)
+- **GET**(/id)  [http://185.251.38.197/container/id](http://185.251.38.197/container/)
 
 ## Ответы сервиса
 
@@ -122,17 +121,36 @@
 
 ## Установка
 
+Клонирование репозитория и подготовка к установке:
 ```
-$ git clone 
-$ composer install
+$ git clone https://github.com/skodnik/Lamoda-PHP-Quest.git laravel-app
+$ cd ~/laravel-app
+$ cp env.example .env
 ```
-В файле .env прописать тип и параметры подключения к БД.
 
+Устновка через docker:
 ```
+$ docker run --rm -v $(pwd):/app composer install
+$ docker-compose up -d
+$ docker ps
+```
+
+Пример вывода, тут нужно взять CONTAINER ID app и использовать на следующем шаге:
+```
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                                      NAMES
+239c5ff2437f        digitalocean.com/php   "docker-php-entrypoi…"   28 seconds ago      Up 25 seconds       9000/tcp                                   app
+4fd62e203516        nginx:alpine           "nginx -g 'daemon of…"   28 seconds ago      Up 25 seconds       0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   webserver
+```
+
+Настройка Laravel:
+```
+$ docker exec -it cd3ad05dc9f6 /bin/bash
+$ php artisan key:generate
+$ touch database/database.sqlite
 $ php artisan migrate
 ```
 
-Параметры. Необходимо скорректировать и добавить в файл .env
+Дополнение. Параметры. Размещены в .env
 ```
 QUANTITY_CONTAINERS=100
 QUANTITY_NAMES=400
@@ -153,7 +171,7 @@ $ php artisan fake:make
 ```
 //////////////////////////////////////
 Fake maker init
-Start: 27 July 06:41:15
+Start: 28 July 20:47:01
 Fake init params:
 +---------------------+-----------------------------+-----------------------+----------------+
 | QUANTITY_CONTAINERS | QUANTITY_ITEMS_IN_CONTAINER | QUANTITY_UNIQUE_NAMES | QUANTITY_NAMES |
@@ -161,7 +179,7 @@ Fake init params:
 | 100                 | 10                          | 100                   | 400            |
 +---------------------+-----------------------------+-----------------------+----------------+
 Fake maker well done
-End: 27 July 06:41:38
+End: 28 July 20:47:11
 //////////////////////////////////////
 ```
 
@@ -174,7 +192,7 @@ $ php artisan fake:get
 ```
 //////////////////////////////////////
 Fake get info
-Start: 27 July 07:03:01
+Start: 28 July 21:06:06
 Fake init params:
 +---------------------+-----------------------------+-----------------------+----------------+
 | QUANTITY_CONTAINERS | QUANTITY_ITEMS_IN_CONTAINER | QUANTITY_UNIQUE_NAMES | QUANTITY_NAMES |
@@ -185,22 +203,22 @@ Containers with unique items list:
 +----------+------------+
 | id       | name       |
 +----------+------------+
-| 29462542 | Ruthe      |
-| 38898086 | Katheryn   |
-| 55651650 | Savanna    |
+| 55435515 | Brigitte   |
+| 85065043 | Selina     |
+| 66962196 | Gilda      |
 
-...
+ ...
 
-| 24473677 | Katharina  |
-| 40496609 | Amely      |
-| 14118744 | Guadalupe  |
+| 92627071 | Krista     |
+| 4205824  | Dena       |
+| 94496104 | Marquise   |
 +----------+------------+
 ***********************************
-*     Containers quantity: 57     *
+*     Containers quantity: 64     *
 ***********************************
 
 Fake get info well done
-End: 27 July 07:03:01
+End: 28 July 21:06:06
 //////////////////////////////////////
 ```
 
@@ -208,10 +226,23 @@ End: 27 July 07:03:01
 ![Database structure](database.png)
 
 ## Тесты
-phpunit: /app/tests/Feature/RequestTests.php
+```
+$ php vendor/bin/phpunit tests/Feature/BasicTests.php
+```
+
+Пример результата:
+```
+PHPUnit 7.5.14 by Sebastian Bergmann and contributors.
+
+..........                                                        10 / 10 (100%)
+
+Time: 1.06 seconds, Memory: 20.00 MB
+
+OK (10 tests, 24 assertions)
+```
 
 ## OPEN API
-/app/docs/openapi/api.yml
+[api.yml](/app/docs/openapi/api.yml)
 
 ## Логика генератора:
 1. Определеяется массив идентификаторов в рамках от 1 до значения (QUANTITY_NAMES) указанного в параметрах, в файле .env.
