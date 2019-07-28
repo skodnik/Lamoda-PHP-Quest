@@ -44,7 +44,7 @@
 - **GET**(пустой) [http://185.251.38.197/containers-with-unique-items](http://185.251.38.197/containers-with-unique-items)
 
 ##### Получение конкретного контейнера по его идентификатору
-- **GET**(/id)  [http://185.251.38.197/container/id](http://185.251.38.197/container/)
+- **GET**(/id)  [http://185.251.38.197/container/id](http://185.251.38.197/container/55435515)
 
 ## Ответы сервиса
 
