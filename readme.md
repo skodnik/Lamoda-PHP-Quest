@@ -1,4 +1,8 @@
-# Lamoda PHP Quest
+# Новое решение !!!
+Т.к. текст задания можно понять неоднозначно, альтернативное, вероятно более верное решение в ветке: https://github.com/skodnik/Lamoda-PHP-Quest/tree/unique_names
+
+
+## Lamoda PHP Quest
 
 Вариант выполнения задания предложенного в статье - [Let's play a little game with Lamoda](https://habr.com/ru/company/lamoda/blog/460999/) и направленного на указанный в анкете участника адрес электронной почты. 
 
