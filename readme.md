@@ -47,7 +47,7 @@
 - **GET**(пустой) [http://185.251.38.197/containers-with-unique-items](http://185.251.38.197/containers-with-unique-items)
 
 ##### Получение конкретного контейнера по его идентификатору
-- **GET**(/id)  [http://185.251.38.197/container/id](http://185.251.38.197/container/55435515)
+- **GET**(/id)  [http://185.251.38.197/container/id](http://185.251.38.197/container/39)
 
 ## Ответы сервиса
 
@@ -126,7 +126,7 @@
 
 Клонирование репозитория и подготовка к установке:
 ```
-$ git clone https://github.com/skodnik/Lamoda-PHP-Quest.git laravel-app
+$ git clone --single-branch --branch unique_names https://github.com/skodnik/Lamoda-PHP-Quest.git laravel-app
 $ cd ~/laravel-app
 $ cp env.example .env
 ```
@@ -179,7 +179,7 @@ $ php artisan fake:make
 ```
 //////////////////////////////////////
 Fake maker init
-Start: 1 August 05:52:23
+Start: 1 August 07:20:03
 Fake init params:
 +---------------------+-----------------------------+-----------------------+
 | QUANTITY_CONTAINERS | QUANTITY_ITEMS_IN_CONTAINER | QUANTITY_UNIQUE_NAMES |
@@ -187,7 +187,7 @@ Fake init params:
 | 1000                | 10                          | 100                   |
 +---------------------+-----------------------------+-----------------------+
 Fake maker well done
-End: 1 August 05:52:44
+End: 1 August 07:20:39
 //////////////////////////////////////
 ```
 
@@ -200,7 +200,7 @@ $ php artisan fake:get
 ```
 //////////////////////////////////////
 Fake get info
-Start: 1 August 05:35:08
+Start: 1 August 07:21:01
 Fake init params:
 +---------------------+-----------------------------+-----------------------+
 | QUANTITY_CONTAINERS | QUANTITY_ITEMS_IN_CONTAINER | QUANTITY_UNIQUE_NAMES |
@@ -208,23 +208,23 @@ Fake init params:
 | 1000                | 10                          | 100                   |
 +---------------------+-----------------------------+-----------------------+
 Containers with unique items list:
-+----+------------+
-| id | name       |
-+----+------------+
-| 1  | Francisca  |
-| 2  | Gladyce    |
-| 3  | Reyna      |
++----+----------+
+| id | name     |
++----+----------+
+| 1  | Ettie    |
+| 2  | Amie     |
+| 3  | Grace    |
 ...
-| 43 | Christiana |
-| 46 | Aisha      |
-| 50 | Reina      |
-+----+------------+
+| 30 | Flo      |
+| 39 | Evelyn   |
+| 40 | Myra     |
++----+----------+
 ***********************************
-*     Containers quantity: 31     *
+*     Containers quantity: 30     *
 ***********************************
 
 Fake get info well done
-End: 1 August 05:35:10
+End: 1 August 07:21:02
 //////////////////////////////////////
 ```
 
