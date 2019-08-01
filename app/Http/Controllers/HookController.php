@@ -80,34 +80,23 @@ class HookController extends Controller
      */
     public function getUnique()
     {
-        // Забирает все товары с уникальными именами (не unique т.к., тогда нет количества инстансов)
-        $itemsOneCopy = Item::all()->groupBy(['name_id']);
+        // Выбирает контейнеры с уникальными товарами
+        $containers = Service::getContainersWithUniqueItems();
 
-        // Перебирает коллекцию и если у товара только один инстанс, то берет идентификатор контейнера из него
-        // Формирует массив номеров контейнеров
-        foreach ($itemsOneCopy as $item) {
-            if ($item->count() === 1) {
-                $containersId[] = $item[0]->container_id;
-            }
-        }
-
-        // Если не найдено ни одного уникального товара
-        if (!isset($containersId)) {
+        // Если не найдено ни одного контейнера
+        if (!isset($containers)) {
             return response()->json([
                 [
                     'success'           => false,
                     'description'       => '',
                     'error'             => true,
-                    'error_description' => 'Unique items not found',
+                    'error_description' => 'Containers not found',
                 ],
             ]);
         }
 
-        // Убирает дубликаты из массива номеров контейнеров
-        $containersIdOneCopy = array_unique($containersId);
-
         // Перебирает идентификаторы контейнеров
-        foreach ($containersIdOneCopy as $key => $id) {
+        foreach ($containers as $key => $id) {
 
             // Выбирает конкретный объект контейнера
             $container = Container::where('id', $id)->first();

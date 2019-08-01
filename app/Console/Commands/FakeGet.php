@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Container;
 use App\Models\Item;
+use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -44,34 +45,24 @@ class FakeGet extends Command
         $this->info('Fake get info');
         $this->info('Start: ' . Carbon::now()->locale('en')->isoFormat('D MMMM HH:mm:ss'));
         $this->info('Fake init params:');
-        $headers = ['QUANTITY_CONTAINERS', 'QUANTITY_ITEMS_IN_CONTAINER', 'QUANTITY_UNIQUE_NAMES', 'QUANTITY_NAMES'];
-        $rows = [[$_ENV['QUANTITY_CONTAINERS'], $_ENV['QUANTITY_ITEMS_IN_CONTAINER'], $_ENV['QUANTITY_UNIQUE_NAMES'], $_ENV['QUANTITY_NAMES']]];
+        $headers = ['QUANTITY_CONTAINERS', 'QUANTITY_ITEMS_IN_CONTAINER', 'QUANTITY_UNIQUE_NAMES'];
+        $rows = [[$_ENV['QUANTITY_CONTAINERS'], $_ENV['QUANTITY_ITEMS_IN_CONTAINER'], $_ENV['QUANTITY_UNIQUE_NAMES']]];
         $this->table($headers, $rows);
 
-        // Забирает все товары с уникальными именами (не unique т.к., тогда нет количества инстансов)
-        $itemsOneCopy = Item::all()->groupBy(['name_id']);
+        // Выбирает контейнеры с уникальными товарами
+        $containers = Service::getContainersWithUniqueItems();
 
-        // Перебирает коллекцию и если у товара только один инстанс, то берет идентификатор контейнера из него
-        // Формирует массив номеров контейнеров
-        foreach ($itemsOneCopy as $item) {
-            if ($item->count() === 1) {
-                $containersId[] = $item[0]->container_id;
-            }
-        }
-
-        // Убирает дубликаты из массива номеров контейнеров
-        $containersIdOneCopy = array_unique($containersId);
-
+        // Форматирование отображения результата
         $this->info('Containers with unique items list:');
         $headers = ['id', 'name'];
         $rows = [];
-        foreach ($containersIdOneCopy as $id) {
+        foreach ($containers as $id) {
             $container = Container::where('id', $id)->first();
             $rows[] = [$id, $container->name];
         }
         $this->table($headers, $rows);
 
-        $this->alert('Containers quantity: ' . count($containersIdOneCopy));
+        $this->alert('Containers quantity: ' . count($containers));
         $this->info('Fake get info well done');
         $this->info('End: ' . Carbon::now()->locale('en')->isoFormat('D MMMM HH:mm:ss'));
         $this->info('//////////////////////////////////////');

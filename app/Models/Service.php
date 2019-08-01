@@ -181,4 +181,38 @@ class Service extends Model
 
         return $report;
     }
+
+    /**
+     * Формирует массив идентификаторов контейнеров содержащих уникальные товары
+     *
+     * @return array|null
+     */
+    public static function getContainersWithUniqueItems():? array
+    {
+        // Забирает все контейнеры
+        $containers = Container::with('items')->get();
+
+        // Если контейнеры не найдены
+        if ($containers->count() === 0) {
+            return null;
+        }
+
+        // В каждом контейнере из списка товаров формирует массив с идентификатоами имен товаров
+        foreach ($containers as $container) {
+            foreach ($container->items->toArray() as $item) {
+                $names[$item['name_id']][] = $container->id;
+            }
+        }
+
+        // Выбирает контейнеры из первых элементов
+        // Тут можно добавить условия оценки результирующих массивов при изменении индекса для оптимизации результата
+        foreach ($names as $name) {
+            $result[] = $name[0];
+        }
+
+        // Убирает повторяющиеся идентификаторы
+        $result = array_unique($result);
+
+        return $result;
+    }
 }

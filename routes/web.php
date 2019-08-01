@@ -11,6 +11,10 @@
 |
 */
 
+use App\Models\Container;
+use App\Models\Item;
+use App\Models\Name;
+
 Route::get('/', function () {
     return view('welcome');
 });

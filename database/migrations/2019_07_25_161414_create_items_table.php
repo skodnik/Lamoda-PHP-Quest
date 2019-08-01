@@ -19,12 +19,20 @@ class CreateItemsTable extends Migration
         });
 
         Schema::create('containers', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
+            if ($_ENV['INCREMENT_IDS']) {
+                $table->bigIncrements('id');
+            } else {
+                $table->unsignedBigInteger('id')->unique();
+            }
             $table->string('name');
         });
 
         Schema::create('items', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
+            if ($_ENV['INCREMENT_IDS']) {
+                $table->bigIncrements('id');
+            } else {
+                $table->unsignedBigInteger('id')->unique();
+            }
             $table->unsignedBigInteger('container_id');
             $table->unsignedBigInteger('name_id');
             $table->foreign('container_id')->references('id')->on('containers')->onDelete('cascade');
