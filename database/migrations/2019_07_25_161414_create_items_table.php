@@ -13,20 +13,6 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('names', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-        });
-
-        Schema::create('containers', function (Blueprint $table) {
-            if ($_ENV['INCREMENT_IDS']) {
-                $table->bigIncrements('id');
-            } else {
-                $table->unsignedBigInteger('id')->unique();
-            }
-            $table->string('name');
-        });
-
         Schema::create('items', function (Blueprint $table) {
             if ($_ENV['INCREMENT_IDS']) {
                 $table->bigIncrements('id');
@@ -47,8 +33,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('names');
-        Schema::dropIfExists('containers');
         Schema::dropIfExists('items');
     }
 }
