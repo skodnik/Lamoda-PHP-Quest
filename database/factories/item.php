@@ -16,7 +16,7 @@ $factory->define(Item::class, function (Faker $faker) {
         ];
     } else {
         return [
-            'id' => $faker->numberBetween($min = 1, $max = 99999999),
+            'id' => $faker->numberBetween(1, 99999999),
             'name_id' => random_int(1, $_ENV['QUANTITY_UNIQUE_NAMES']),
         ];
     }
