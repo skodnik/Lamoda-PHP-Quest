@@ -9,8 +9,6 @@ use Tests\TestCase;
 
 class BasicTests extends TestCase
 {
-    use WithFaker;
-
     /*
      * Маршруты и коды ответов
      */
@@ -24,7 +22,7 @@ class BasicTests extends TestCase
     public function testGetHook()
     {
         $response = $this->get('/hook');
-        $response->assertStatus(404);
+        $response->assertStatus(405);
     }
 
     public function testPostHook()
@@ -33,16 +31,16 @@ class BasicTests extends TestCase
         $response = $this->json('POST', '/hook');
         $response->assertStatus(200);
         $response->assertJsonFragment([
-            'success' => false,
-            'description' => '',
-            'error' => true,
+            'success'           => false,
+            'description'       => '',
+            'error'             => true,
             'error_description' => 'Empty request',
         ]);
     }
 
     public function testGetId()
     {
-        if($containerId = Container::all()){
+        if ($containerId = Container::all()) {
             $containerId = 1;
         } else {
             $containerId = Container::all()->random()->id;
@@ -63,6 +61,23 @@ class BasicTests extends TestCase
         $response = $this->call('GET', '/containers-with-unique-items');
         $response->assertStatus(200);
         $this->assertJson($response->getContent());
+    }
+
+    /*
+     * Проверка корректности
+     */
+
+    public function testCheckUnique()
+    {
+        $response = $this->call('GET', '/containers-with-unique-items');
+        $containers = json_decode($response->getContent(), true);
+
+        foreach ($containers as $container) {
+            foreach ($container['items'] as $item) {
+                $names[$item['name']][] = $container['id'];
+            }
+        }
+        $this->assertCount($_ENV['QUANTITY_UNIQUE_NAMES'], $names);
     }
 
     /*
