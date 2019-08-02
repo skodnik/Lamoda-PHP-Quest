@@ -236,15 +236,7 @@ $ php vendor/bin/phpunit tests/Feature/BasicTests.php
 ```
 
 Пример результата:
-```
-PHPUnit 7.5.14 by Sebastian Bergmann and contributors.
-
-..........                                                        10 / 10 (100%)
-
-Time: 1.06 seconds, Memory: 20.00 MB
-
-OK (10 tests, 24 assertions)
-```
+![test_result](tests.png)
 
 ## OPEN API
 [api.yml](/app/docs/openapi/api.yml)
