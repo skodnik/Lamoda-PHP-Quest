@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class HookController extends Controller
 {
     /**
      * Обработчик POST запроса на получение (сохранение) сервисом данных
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      */
-    public static function main(): JsonResponse
+    public static function main(Request $request): JsonResponse
     {
-        // Заглушка для пустого запроса
-        if (!file_get_contents('php://input')) {
+        if (empty($request->toArray())) {
             return response()->json([
                 'success'           => false,
                 'description'       => '',
@@ -27,10 +29,11 @@ class HookController extends Controller
         // Инстанцирование объекта класса Service
         $service = new Service;
 
-        // Основной цикл обработки запроса
-        $service = $service
-            ->handle()
-            ->store();
+        // Забирает входные данные
+        $service->data = $request->toArray();
+
+        // Сохранение элементов
+        $service = $service->store();
 
         // Сериализует и отдает ответ
         return response()->json($service->report);

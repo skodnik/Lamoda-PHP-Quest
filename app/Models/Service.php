@@ -4,41 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 /**
  * @property mixed report
  * @property array containers
  * @property mixed data
+ * @property Request request
  */
 class Service extends Model
 {
-    /**
-     * Обработка сырого запроса
-     *
-     * @return Service
-     */
-    public function handle(): self
-    {
-        // Забирает входящие данные
-        $request = file_get_contents('php://input');
-
-        // Формирует массив из входящих данных
-        $this->data = json_decode($request, true);
-
-        // Формирует ответ в случае некорректности входящего формата данных
-        if ($this->data === null && json_last_error() !== JSON_ERROR_NONE) {
-            $this->report = [
-                'success'           => false,
-                'description'       => '',
-                'error'             => true,
-                'error_description' => 'JSON incorrect format',
-            ];
-        }
-
-        // Возвращает готовый объект
-        return $this;
-    }
-
     /**
      * Сохранение элементов
      *
@@ -46,11 +21,6 @@ class Service extends Model
      */
     public function store(): self
     {
-        // Если на предыдущем этапе возникла ошибка
-        if ($this->report['error']) {
-            return $this;
-        }
-
         $data = $this->data;
 
         // Если это список контейнерв
@@ -191,6 +161,13 @@ class Service extends Model
         return $report;
     }
 
+    /**
+     * Получает контейнер по его идентификатору
+     *
+     * @param $id
+     *
+     * @return $this
+     */
     public function getContainerById($id)
     {
         // Находит искомый контейнер по идентификатору
