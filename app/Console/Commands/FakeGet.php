@@ -56,13 +56,21 @@ class FakeGet extends Command
         $this->info('Containers with unique items list:');
         $headers = ['id', 'name'];
         $rows = [];
+        $names = [];
+
         foreach ($containers as $id) {
             $container = Container::where('id', $id)->first();
             $rows[] = [$id, $container->name];
+
+            $items = $container->items;
+
+            foreach ($items as $item) {
+                $names[$item->name_id][] = $container->id;
+            }
         }
         $this->table($headers, $rows);
 
-        $this->alert('Containers quantity: ' . count($containers));
+        $this->alert('Containers quantity: ' . count($containers) . ', unique names quantity: ' . count($names));
         $this->info('Fake get info well done');
         $this->info('End: ' . Carbon::now()->locale('en')->isoFormat('D MMMM HH:mm:ss'));
         $this->info('//////////////////////////////////////');
