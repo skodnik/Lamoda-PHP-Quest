@@ -3,15 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 
+/**
+ * @property mixed report
+ * @property array containers
+ * @property mixed data
+ */
 class Service extends Model
 {
     /**
      * Обработка сырого запроса
      *
-     * @param bool $request
-     *
-     * @return $this
+     * @return Service
      */
     public function handle(): self
     {
@@ -31,6 +35,7 @@ class Service extends Model
             ];
         }
 
+        // Возвращает готовый объект
         return $this;
     }
 
@@ -39,7 +44,7 @@ class Service extends Model
      *
      * @return Service
      */
-    public function store()
+    public function store(): self
     {
         // Если на предыдущем этапе возникла ошибка
         if ($this->report['error']) {
@@ -94,7 +99,7 @@ class Service extends Model
                         'error'             => false,
                         'error_description' => '',
                     ];
-                } catch (\Illuminate\Database\QueryException $e) {
+                } catch (QueryException $e) {
                     $this->report = [
                         'success'           => false,
                         'description'       => '',
@@ -146,7 +151,7 @@ class Service extends Model
                     'error'             => false,
                     'error_description' => '',
                 ];
-            } catch (\Illuminate\Database\QueryException $e) {
+            } catch (QueryException $e) {
                 $this->report = [
                     'success'           => false,
                     'description'       => '',
@@ -157,6 +162,7 @@ class Service extends Model
 
         }
 
+        // Возвращает готовый объект
         return $this;
     }
 
@@ -167,10 +173,12 @@ class Service extends Model
      *
      * @return array|null
      */
-    public static function inputCheckStructure($data)
+    public static function inputCheckStructure($data): ?array
     {
         $report = null;
-        if (!isset($data['id']) || !isset($data['name']) || !isset($data['items'])) {
+
+        // Проверка существования ключей входящего массива при необходимости расширить проверкой ключей массива товаров
+        if (!isset($data['id'], $data['name'], $data['items'])) {
             $report = [
                 'success'           => false,
                 'description'       => '',
@@ -179,23 +187,72 @@ class Service extends Model
             ];
         }
 
+        // Возвращает массив ответа или null
         return $report;
+    }
+
+    public function getContainerById($id)
+    {
+        // Находит искомый контейнер по идентификатору
+        if (!$container = Container::where('id', $id)->first()) {
+            $this->report = response()->json([
+                'success'           => false,
+                'description'       => '',
+                'error'             => true,
+                'error_description' => 'Container #' . $id . ' not found',
+            ]);
+
+            return $this;
+        }
+
+        // Забирает товары контейнера
+        $items = $container->items;
+
+        // Подготовка массива
+        $i = [];
+
+        // Перебирает товары формируя массив для вывода
+        foreach ($items as $item) {
+            $i[] = ['id' => $item->id, 'name' => $item->name->name];
+        }
+
+        // Формирует массив вывода
+        $toJson = ['id' => $container->id, 'name' => $container->name, 'items' => $i];
+
+        // Формирует свойства объекта
+        $this->report = response()->json($toJson);
+
+        // Возвращает готовый объект
+        return $this;
     }
 
     /**
      * Формирует массив идентификаторов контейнеров содержащих уникальные товары
      *
-     * @return array|null
+     * @return Service
      */
-    public static function getContainersWithUniqueItems():? array
+    public function getContainersWithUniqueItems(): self
     {
         // Забирает все контейнеры
         $containers = Container::with('items')->get();
 
         // Если контейнеры не найдены
         if ($containers->count() === 0) {
-            return null;
+            $this->report = response()->json([
+                [
+                    'success'           => false,
+                    'description'       => '',
+                    'error'             => true,
+                    'error_description' => 'Containers not found',
+                ],
+            ]);
+            return $this;
         }
+
+        // Подготовка массивов
+        $result = [];
+        $toJson = [];
+        $names = [];
 
         // В каждом контейнере из списка товаров формирует массив с идентификатоами имен товаров
         foreach ($containers as $container) {
@@ -211,8 +268,34 @@ class Service extends Model
         }
 
         // Убирает повторяющиеся идентификаторы
-        $result = array_unique($result);
+        $containers = array_unique($result);
 
-        return $result;
+        // Перебирает идентификаторы контейнеров
+        foreach ($containers as $key => $id) {
+
+            // Выбирает конкретный объект контейнера
+            $container = Container::where('id', $id)->first();
+
+            // Массив объектов товаров этого контейнера
+            $items = $container->items;
+
+            // Подготовка массива
+            $itemsArray = [];
+
+            // Перебирает товары формируя массив для вывода
+            foreach ($items as $item) {
+                $itemsArray[$key][] = ['id' => $item->id, 'name' => $item->name->name];
+            }
+
+            // Формирует массив вывода
+            $toJson[] = ['id' => $id, 'name' => $container->name, 'items' => $itemsArray[$key]];
+        }
+
+        // Формирует свойства объекта
+        $this->containers = $containers;
+        $this->report = response()->json($toJson);
+
+        // Возвращает готовый объект
+        return $this;
     }
 }

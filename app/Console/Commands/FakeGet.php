@@ -49,8 +49,11 @@ class FakeGet extends Command
         $rows = [[$_ENV['QUANTITY_CONTAINERS'], $_ENV['QUANTITY_ITEMS_IN_CONTAINER'], $_ENV['QUANTITY_UNIQUE_NAMES']]];
         $this->table($headers, $rows);
 
+        // Инстанцирование объекта класса Service
+        $service = new Service;
+
         // Выбирает контейнеры с уникальными товарами
-        $containers = Service::getContainersWithUniqueItems();
+        $containers = $service->getContainersWithUniqueItems()->containers;
 
         // Форматирование отображения результата
         $this->info('Containers with unique items list:');

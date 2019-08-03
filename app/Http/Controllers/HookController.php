@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Container;
-use App\Models\Item;
 use App\Models\Service;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class HookController extends Controller
 {
     /**
-     * Обработчик входящего запроса
+     * Обработчик POST запроса на получение (сохранение) сервисом данных
      *
-     * @param bool $request
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public static function main()
+    public static function main(): JsonResponse
     {
-        // Заглушка для пустого запроса, '&& !$request' используется для отладки
+        // Заглушка для пустого запроса
         if (!file_get_contents('php://input')) {
             return response()->json([
                 'success'           => false,
@@ -36,84 +32,43 @@ class HookController extends Controller
             ->handle()
             ->store();
 
+        // Сериализует и отдает ответ
         return response()->json($service->report);
     }
 
     /**
-     * Обработчик запроса контейнера по уникальному идентификатору
+     * Обработчик GET запроса контейнера по уникальному идентификатору
      *
-     * @param bool $id
+     * @param integer $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getById($id)
+    public function getById($id): JsonResponse
     {
-        // Находит искомый контейнер по идентификатору
-        if (!$container = Container::where('id', $id)->first()) {
-            return response()->json([
-                'success'           => false,
-                'description'       => '',
-                'error'             => true,
-                'error_description' => 'Container #' . $id . ' not found',
-            ]);
-        }
+        // Инстанцирование объекта класса Service
+        $service = new Service;
 
-        // Забирает товары контейнера
-        $items = $container->items;
+        // Получение контейнера по идентификатору, подготовка ответа
+        $service = $service->getContainerById($id);
 
-        // Перебирает товары формируя массив для вывода
-        foreach ($items as $item) {
-            $i[] = ['id' => $item->id, 'name' => $item->name->name];
-        }
-
-        // Формирует массив вывода
-        $toJson = ['id' => $container->id, 'name' => $container->name, 'items' => $i];
-
-        // Отдает json
-        return response()->json($toJson);
+        // Отдает подготовленый ответ
+        return $service->report;
     }
 
     /**
-     * Обработчик запроса на получение списка контейнеров содержащих уникальные товары
+     * Обработчик GET запроса на получение списка контейнеров содержащих уникальные товары
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getUnique()
+    public function getUnique(): JsonResponse
     {
-        // Выбирает контейнеры с уникальными товарами
-        $containers = Service::getContainersWithUniqueItems();
+        // Инстанцирование объекта класса Service
+        $service = new Service;
 
-        // Если не найдено ни одного контейнера
-        if (!isset($containers)) {
-            return response()->json([
-                [
-                    'success'           => false,
-                    'description'       => '',
-                    'error'             => true,
-                    'error_description' => 'Containers not found',
-                ],
-            ]);
-        }
+        // Получение списка контейнеров, подготовка ответа
+        $service = $service->getContainersWithUniqueItems();
 
-        // Перебирает идентификаторы контейнеров
-        foreach ($containers as $key => $id) {
-
-            // Выбирает конкретный объект контейнера
-            $container = Container::where('id', $id)->first();
-
-            // Массив объектов товаров этого контейнера
-            $items = $container->items;
-
-            // Перебирает товары формируя массив для вывода
-            foreach ($items as $item) {
-                $itemsArray[$key][] = ['id' => $item->id, 'name' => $item->name->name];
-            }
-
-            // Формирует массив вывода
-            $toJson[] = ['id' => $id, 'name' => $container->name, 'items' => $itemsArray[$key]];
-        }
-
-        // Отдает json
-        return response()->json($toJson);
+        // Отдает подготовленый ответ
+        return $service->report;
     }
 }
