@@ -25,7 +25,7 @@ class AlgorithmOptimalityTests extends TestCase
      * Проверка корректности полученного списка соответствием количесту уникальных товаров
      * Проверка оптимальности алгоритма путем сравнения с минимальным количеством в выборке
      */
-    public function testMakeFakeGetIdGetUniqueCheckUnique()
+    public function testAlgorithmOptimality()
     {
         /**
          * Генератор случайных данных
