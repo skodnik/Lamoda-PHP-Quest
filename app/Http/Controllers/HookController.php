@@ -35,8 +35,11 @@ class HookController extends Controller
         // Сохранение элементов
         $service = $service->store();
 
+        // Подготовка кода ответа
+        $httpCode = $service->httpCode ?? 200;
+
         // Сериализует и отдает ответ
-        return response()->json($service->report);
+        return response()->json($service->report, $httpCode);
     }
 
     /**

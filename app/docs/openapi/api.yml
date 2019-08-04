@@ -43,7 +43,7 @@ paths:
                           type: string
                           example: PeggieAntiqueWhite
         '404':
-          description: "Указанный идентификатор не является числом"
+          description: "Указанный идентификатор некорректен"
   /containers-with-unique-items:
     get:
       summary: "Отдает информацию о контейнерах содержащих уникальные товары"
@@ -118,3 +118,23 @@ paths:
                    type: boolean
                  error_description:
                    type: string
+        '422':
+          description: "Некорректная структура входных данных"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  description:
+                    type: string
+                  error:
+                    type: boolean
+                  error_description:
+                    type: string
+    get:
+      summary: "Неподдерживаемый метод"
+      responses:
+        '405':
+          description: "Неподдерживаемый метод"

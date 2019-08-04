@@ -110,6 +110,26 @@ class BasicTests extends TestCase
     }
 
     /**
+     * Проверка неуспешной записи нового контейнера по причине некорректной структуры данных
+     */
+    public function testPostHookWithIncorrectData()
+    {
+        $datas = [
+            ['id' => 1],
+            ['id' => 1, 'name' => 'julia'],
+            ['id' => 1, 'items' => 'some item'],
+            ['name' => 'julia', 'items' => 'some item'],
+            ['id' => 1, 'name' => 'julia', 'items' => 'some item'],
+        ];
+
+        foreach ($datas as $data) {
+            $response = $this->json('POST', '/hook', $data);
+            $response->assertJsonFragment(['success' => false]);
+            $response->assertStatus(422);
+        }
+    }
+
+    /**
      * Проверка корректности обработки POST запроса с передачей корректных данных
      * Проверка попытки записать дублирующиеся данные
      */

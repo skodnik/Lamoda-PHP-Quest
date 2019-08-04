@@ -35,6 +35,7 @@ class Service extends Model
                 // Проверка корректности структуры
                 if ($report = self::inputCheckStructure($data[$key])) {
                     $this->report = $report;
+                    $this->httpCode = 422;
                     return $this;
                 }
 
@@ -86,6 +87,7 @@ class Service extends Model
             // Проверка корректности структуры
             if ($report = self::inputCheckStructure($data)) {
                 $this->report = $report;
+                $this->httpCode = 422;
                 return $this;
             }
 
@@ -148,7 +150,7 @@ class Service extends Model
         $report = null;
 
         // Проверка существования ключей входящего массива при необходимости расширить проверкой ключей массива товаров
-        if (!isset($data['id'], $data['name'], $data['items'])) {
+        if (!isset($data['id'], $data['name'], $data['items']) || !is_array($data['items'])) {
             $report = [
                 'success'           => false,
                 'description'       => '',
