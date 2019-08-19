@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,4 +18,3 @@ Route::get('/container/{id}', 'HookController@getById')->where('id', '[0-9]+');
 
 // Получение списка контейнеров с уникальными товарами
 Route::get('/containers-with-unique-items', 'HookController@getUnique');
-
